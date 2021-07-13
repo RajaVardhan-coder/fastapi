@@ -1,5 +1,6 @@
 import jwt, random
 import regex as re 
+from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException, status 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm 
 from passlib.hash import bcrypt 
@@ -21,7 +22,7 @@ class User(Model):
 
     def verify_password(self, password):
         return bcrypt.verify(password, self.password_hash)
-
+    
     
 def is_valid_mail(email):
     regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
@@ -81,21 +82,47 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 @app.post('/register', response_model=User_Pydantic)
-async def create_user(user: UserIn_Pydantic):
-    user_obj = User(username=user.username, password_hash=bcrypt.hash(user.password_hash), phone_no=user.phone_no, email=user.email)
-    email_verification = is_valid_mail(user.email)
-    phone_varification = is_valid_phone(user.phone_no)
+async def create_user(Username : str, Password : str, Phone_no : str , Email : str):
+    user_obj = User(username=Username, password_hash=bcrypt.hash(Password), phone_no = Phone_no, email = Email)
+    email_verification = is_valid_mail(Email)
+    phone_varification = is_valid_phone(Phone_no)
     if(email_verification != True or phone_varification != True):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
-            detail='Invalid username or password'
+            detail='Invalid Email or Phone number'
         )
     await user_obj.save()
     return await User_Pydantic.from_tortoise_orm(user_obj)
 
 
+
 @app.get('/users/id', response_model=User_Pydantic)
 async def get_user(user: User_Pydantic = Depends(get_current_user)):
+    return await User_Pydantic.from_queryset_single(User.get(id=user.id))
+
+
+@app.patch('/users/id', response_model=User_Pydantic)
+async def put_user(Phone_no : Optional[str] = None , Email : Optional[str] = None , user: User_Pydantic = Depends(get_current_user)):
+    email_verification = phone_varification = True
+    if Email:
+        email_verification = is_valid_mail(Email)
+        if(email_verification != True):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, 
+                detail='Invalid Email'
+            )
+        await User.filter(id=user.id).update(email = Email)
+        return await User_Pydantic.from_queryset_single(User.get(id=user.id))
+    if Phone_no:
+        phone_varification = is_valid_phone(Phone_no)
+        if(phone_varification != True):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, 
+                detail='Invalid Phone number'
+            )
+        await User.filter(id=user.id).update(phone_no = Phone_no)
+        return await User_Pydantic.from_queryset_single(User.get(id=user.id))
+
     return await User_Pydantic.from_queryset_single(User.get(id=user.id))
 
 
