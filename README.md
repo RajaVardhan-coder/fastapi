@@ -1,6 +1,4 @@
-# fastapi
-fastapi
-#fastapi
+
 
 To run this application we have to create database on your localhost
 
