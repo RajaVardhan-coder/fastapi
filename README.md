@@ -8,4 +8,6 @@ To run this application we have to create database on your localhost
     phone_no = fields.data.CharField(100)
     email = fields.CharField(128)
 
-Your can puerform CRUD operations using fastapi
+download pakages using 
+ 
+ pip install -r requirements.txt
