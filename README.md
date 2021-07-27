@@ -1,6 +1,8 @@
 
 
 To run this application we have to create database on your localhost
+datebase name = fastapi
+table name = user
 
     id = fields.IntField(pk=True)
     username = fields.CharField(50, unique=True)
