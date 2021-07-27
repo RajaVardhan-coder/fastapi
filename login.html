@@ -1,0 +1,20 @@
+
+<script language="javascript" type="text/javascript">
+    function Login()
+    {
+    document.getElementById("form_data").action="token";
+    document.getElementById("form_data").submit();
+    }
+    
+    
+    </script>
+    
+    <form id="form_data" method="post">
+    <table border="1">
+    <tr><td>Username</td><td><input id="username" name="username" type="text" /></td></tr>
+    <tr><td>Password</td><td><input id="password" name="password" type="password"  /></td></tr>
+    <tr><td><a href="javascript:;" onclick="Login();" >Login</a></td>
+    <td><a href="javascript:;" onclick="window.location.href='home';" >Back</a></td></tr>
+    </table>
+    </form>
+    

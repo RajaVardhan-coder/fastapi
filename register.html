@@ -1,0 +1,23 @@
+
+<script language="javascript" type="text/javascript">
+    function insertUser()
+    {
+    document.getElementById("frm").action="reg";
+    document.getElementById("frm").submit();
+    }
+    
+    
+</script>
+    
+    <form id="frm" method="post">
+    <table border="1">
+    <tr><td>Username</td><td><input id="Username" name="Username" type="text" /></td></tr>
+    <tr><td>E-mail</td><td><input id="Email" name="Email" type="text"  /></td></tr>
+    <tr><td>Password</td><td><input id="Password" name="Password" type="password"  /></td></tr>
+    <tr><td>Phone</td><td><input id="Phone_no" name="Phone_no" type="text" /></td></tr>
+    <tr><td>Keyword</td><td><input id="Keyword" name="Keyword" type="text" /></td></tr>
+    <tr><td><a href="javascript:;" onclick="insertUser();" >Save</a></td>
+    <td><a href="javascript:;" onclick="window.location.href='home';" >Back</a></td></tr>
+    </table>
+    </form>
+    
